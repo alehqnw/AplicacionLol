@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.example.aplicacionnbaf.R
 import java.security.Principal
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Pantalla(){
     var Champs:ArrayList<Campeones> = ArrayList<Campeones>()
@@ -39,6 +41,8 @@ fun Pantalla(){
 
 
     var TextoLazy by remember { mutableStateOf(" ") }
+    var estaActivoSB by remember{ mutableStateOf(false) }
+    var TextoBuscar by remember { mutableStateOf("") }
     System.out.println("Size del ChampaRRAYLIST "+Champs.size)
     Column(modifier = Modifier
         .fillMaxSize()
@@ -53,6 +57,9 @@ fun Pantalla(){
         /*SearchBar(query = Champs) { Barra de busqueda para los campeones
             
         }*/
+        SearchBar(query = TextoBuscar , onQueryChange = {TextoBuscar = it} , onSearch ={} , active = estaActivoSB, onActiveChange = {estaActivoSB = !estaActivoSB} ) {
+            Champs.forEach{ campeones ->  Text(campeones.Nombre)}
+        }
         LazyColumn(
             modifier = Modifier
                 .weight(5f)
