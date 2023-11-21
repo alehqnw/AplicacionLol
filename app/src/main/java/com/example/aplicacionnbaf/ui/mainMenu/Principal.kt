@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardDefaults.cardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
@@ -51,13 +53,14 @@ fun Pantalla(){
             modifier= Modifier
                 .weight(0.7f)
                 .fillMaxWidth()) //Insertar música y foto aquí o previo
-        Text(text = "InsertarBuscador", modifier = Modifier
-            .weight(0.5f)
-            .fillMaxWidth())
+
         /*SearchBar(query = Champs) { Barra de busqueda para los campeones
-            
+
         }*/
-        SearchBar(query = TextoBuscar , onQueryChange = {TextoBuscar = it} , onSearch ={} , active = estaActivoSB, onActiveChange = {estaActivoSB = !estaActivoSB} ) {
+        SearchBar(query = TextoBuscar , onQueryChange = {TextoBuscar = it} , onSearch ={} , active = estaActivoSB, onActiveChange = {estaActivoSB = !estaActivoSB},
+            modifier = Modifier
+                .weight(0.5f)
+                .fillMaxWidth()) {
             Champs.forEach{ campeones ->  Text(campeones.Nombre)}
         }
         LazyColumn(
@@ -102,7 +105,9 @@ fun PrevPantalla(){
 fun ChampCard(Nombre:String,Linea:ArrayList<String>,Winrate:String,Imagen:Int){
     Card(modifier = Modifier
         .fillMaxWidth()
-        .padding(10.dp)) {
+        .padding(10.dp)
+        ,colors = CardDefaults.cardColors(Color.Gray)
+    ) {
         Row {
             Image(
                 painter = painterResource(id = Imagen),
