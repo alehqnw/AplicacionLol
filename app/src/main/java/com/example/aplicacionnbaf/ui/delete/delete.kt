@@ -62,21 +62,17 @@ private fun ChampCard(Nombre:String,Linea:ArrayList<String>,Winrate:Int,Imagen:I
 }
 
 fun deleteArray(Campeon:ArrayList<Campeones>, Nombre: String): ArrayList<Campeones> {
-    var Champs:ArrayList<Campeones> = ArrayList<Campeones>()
-    Champs = Campeon
+
     Campeon.forEach { campeones ->
-        (if (campeones.Nombre.contains(Nombre)) {
-            Champs.removeIf{ lolete ->
-                lolete.Nombre.contains(campeones.Nombre)
-            }
-
+        (if (campeones.Nombre == Nombre) {
+            //Campeon.removeAt(Campeon.indexOf(campeones))
+            campeones.visible=false
         })
-
     }
-
-    return Champs
+    System.out.println(Campeon.size)
+    return Campeon
 }
-var Champeon:ArrayList<Campeones> = ArrayList<Campeones>()
+var Champeon = CargaChamp()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +81,7 @@ fun DelWin(navController: NavController?){
     var TextoBuscar by remember { mutableStateOf("") }//Texto a buscar del SearchBar
     var ChamnewList: ArrayList<Campeones> = ArrayList<Campeones>()//Ponerarrray
 
-    val champs:ArrayList<Campeones> = CargaChamp()
+
 
     Column(modifier = Modifier.fillMaxSize()) {
         SearchBar(
@@ -99,26 +95,30 @@ fun DelWin(navController: NavController?){
                 .alpha(1f)
             //.border(width = 2.dp, color = lol, shape = )
         ) {
-            champs.forEach { campeones ->
+            Champeon.forEach { campeones ->
                 (if (campeones.Nombre.toLowerCase().contains(TextoBuscar.toLowerCase())) {
-                    ChampCard(
-                        Nombre = campeones.Nombre,
-                        Linea = campeones.Lineas,
-                        Imagen = campeones.Imagen,
-                        Winrate = campeones.Winrate
-                    )
-                })
-                Button(onClick = {Champeon = deleteArray(
-                    Campeon = champs,
-                    Nombre = campeones.Nombre
-                    );
-                    if (navController != null) {
-                    navController.navigate(Rutas.Principal.ruta)
-                    }
-                }) {
-                    Text(text = "Eliminar");
+                    if(campeones.visible){
+                        ChampCard(
+                            Nombre = campeones.Nombre,
+                            Linea = campeones.Lineas,
+                            Imagen = campeones.Imagen,
+                            Winrate = campeones.Winrate
+                        )
+                        Button(onClick = {Champeon = deleteArray(
+                            Campeon = Champeon as ArrayList<Campeones>,
+                            Nombre = campeones.Nombre
+                        );
+                            if (navController != null) {
+                                navController.navigate(Rutas.Principal.ruta)
+                            }
+                        }) {
+                            Text(text = "Eliminar");
 
-                }
+                        }
+                    }
+
+                })
+
 
             }
         }
@@ -128,20 +128,24 @@ fun DelWin(navController: NavController?){
                 .fillMaxWidth()) {
             item{
                 Champs.forEach{ champ->(
-                       ChampCard(
-                            Nombre = champ.Nombre,
-                            Linea = champ.Lineas,
-                            Imagen = champ.Imagen,
-                            Winrate = champ.Winrate
-                        ))
-                    Button(onClick = {Champeon = deleteArray(champs, champ.Nombre);
-                        if (navController != null) {
-                        navController.navigate(Rutas.Principal.ruta)
-                        }
-                    }) {
-                        Text(text = "Eliminar");
+                        if(champ.visible){
+                            ChampCard(
+                                Nombre = champ.Nombre,
+                                Linea = champ.Lineas,
+                                Imagen = champ.Imagen,
+                                Winrate = champ.Winrate
+                            )
+                            Button(onClick = {Champeon = deleteArray(Champeon as ArrayList<Campeones>, champ.Nombre);
+                                /*if (navController != null) {
+                                navController.navigate(Rutas.Principal.ruta)
+                                }*/
+                            }) {
+                                Text(text = "Eliminar");
 
-                    }
+                            }
+                        }
+                       )
+
                 }
 
             }
@@ -149,7 +153,7 @@ fun DelWin(navController: NavController?){
     }
 
 }
-fun ChamDelGet():ArrayList<Campeones>{
+fun ChamDelGet(): List<Campeones> {
     return Champeon
 }
 

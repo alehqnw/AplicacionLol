@@ -34,9 +34,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+
 import com.example.aplicacionnbaf.R
 import com.example.aplicacionnbaf.ui.delete.ChamDelGet
 
@@ -52,13 +55,13 @@ fun Pantalla(navController: NavController){
     var deleteActive by remember{ mutableStateOf(false)}
     var estaActivoSB by remember{ mutableStateOf(false) }//Variable del SearchBar
     var TextoBuscar by remember { mutableStateOf("") }//Texto a buscar del SearchBar
-    Champs = CargaChamp()
+    Champs = ChamDelGet() as ArrayList<Campeones>
 
 
     PlayInitialSound()//Esta llamada al método pone una música al entrar a la aplicación
 
 
-    Image(painter = painterResource(id = R.drawable.fondo1), contentDescription = null, modifier = Modifier.fillMaxSize())//Imagen de fondo de la aplicación
+    Image(painter = painterResource(id = R.drawable.fondo), contentDescription = null, modifier = Modifier.fillMaxSize())//Imagen de fondo de la aplicación
     Column(modifier = Modifier
         .fillMaxSize()
         ) {
@@ -81,29 +84,35 @@ fun Pantalla(navController: NavController){
                 ) {
             Champs.forEach { campeones ->
                 (if (campeones.Nombre.toLowerCase().contains(TextoBuscar.toLowerCase())) {
-                    ChampCard(
-                        Nombre = campeones.Nombre,
-                        Linea = campeones.Lineas,
-                        Imagen = campeones.Imagen,
-                        Winrate = campeones.Winrate
-                    )
+                    if(campeones.visible){
+                        ChampCard(
+                            Nombre = campeones.Nombre,
+                            Linea = campeones.Lineas,
+                            Imagen = campeones.Imagen,
+                            Winrate = campeones.Winrate
+                        )
+                    }
+
                 })
             }
             PlaySearchSound()
         }
-
+        //Lista todo los campeones en formato Card
         LazyColumn(
             modifier = Modifier
                 .weight(5f)
                 .fillMaxWidth()) {
             items(1){
                 Champs.forEach{champ->(
-                        ChampCard(
-                            Nombre = champ.Nombre,
-                            Linea = champ.Lineas,
-                            Imagen = champ.Imagen,
-                            Winrate = champ.Winrate
-                            )
+                        if(champ.visible){
+                            ChampCard(
+                                Nombre = champ.Nombre,
+                                Linea = champ.Lineas,
+                                Imagen = champ.Imagen,
+                                Winrate = champ.Winrate
+                                )
+
+                        }
                         )
                 }
                 
@@ -121,17 +130,13 @@ fun Pantalla(navController: NavController){
             Button(onClick = { navController.navigate(Rutas.Delete.ruta) }) {
                 Text(text = "Delete")
 
-                Champs=ChamDelGet()
+                //Champs=ChamDelGet()
 
             }
         }
     }
 }
-//@Preview(showSystemUi = true, showBackground = true)
-//@Composable
-//fun PrevPantalla(){
-//    Pantalla()
-//}
+
 
 
 @Composable
@@ -196,7 +201,7 @@ fun PlaySearchSound() {
 
 }
 
-@Composable
+
 fun CargaChamp():ArrayList<Campeones>{
     val Champs:ArrayList<Campeones> = ArrayList<Campeones>()
     Champs.add(Campeones("Yasuo", arrayListOf("MID","ADC","TOP"), arrayListOf("LUCHADOR"),0, R.drawable.yasuo))
