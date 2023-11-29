@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.aplicacionnbaf.ui.mainMenu.Pantalla
+import com.example.aplicacionnbaf.ui.navegacion.GrafoNavegacion
 import com.example.aplicacionnbaf.ui.theme.AplicacionNBAFTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Pantalla()
+                    GrafoNavegacion()
                 }
             }
         }
