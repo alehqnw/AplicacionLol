@@ -82,7 +82,24 @@ fun Pantalla(navController: NavController){
                 .alpha(1f)
                 //.border(width = 2.dp, color = lol, shape = )
                 ) {
-            Champs.forEach { campeones ->
+                val filtro = Champs.filter { campeones ->
+                    campeones.Lineas.contains(TextoBuscar)
+
+                }
+                filtro.forEach{campeones ->
+                        if(campeones.visible){
+                            ChampCard(
+                                Nombre = campeones.Nombre,
+                                Linea = campeones.Lineas,
+                                Imagen = campeones.Imagen,
+                                Winrate = campeones.Winrate
+                            )
+                        }
+
+                    )
+                }
+                /*
+                Champs.forEach { campeones ->
                 (if (campeones.Nombre.toLowerCase().contains(TextoBuscar.toLowerCase())) {
                     if(campeones.visible){
                         ChampCard(
@@ -94,7 +111,8 @@ fun Pantalla(navController: NavController){
                     }
 
                 })
-            }
+
+            }*/
             PlaySearchSound()
         }
         //Lista todo los campeones en formato Card
