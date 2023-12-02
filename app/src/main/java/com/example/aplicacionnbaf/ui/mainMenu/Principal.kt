@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBar
@@ -34,13 +35,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toUpperCase
 
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 
 import com.example.aplicacionnbaf.R
+import com.example.aplicacionnbaf.ui.addwindow.onCampeonAdded
 import com.example.aplicacionnbaf.ui.delete.ChamDelGet
 
 import com.example.aplicacionnbaf.ui.modelo.Rutas
@@ -55,8 +57,10 @@ fun Pantalla(navController: NavController){
     var deleteActive by remember{ mutableStateOf(false)}
     var estaActivoSB by remember{ mutableStateOf(false) }//Variable del SearchBar
     var TextoBuscar by remember { mutableStateOf("") }//Texto a buscar del SearchBar
-    Champs = ChamDelGet() as ArrayList<Campeones>
+    var filtroN by remember{ mutableStateOf(true)}
+    var filtroL by remember{ mutableStateOf(false)}
 
+    Champs = onCampeonAdded() as ArrayList<Campeones>
 
     PlayInitialSound()//Esta llamada al método pone una música al entrar a la aplicación
 
@@ -82,10 +86,29 @@ fun Pantalla(navController: NavController){
                 .alpha(1f)
                 //.border(width = 2.dp, color = lol, shape = )
                 ) {
-                val filtro = Champs.filter { campeones ->
-                    campeones.Lineas.contains(TextoBuscar)
-
+                Row {
+                    Checkbox(checked = filtroN, onCheckedChange = { filtroN = it })
+                    Text(text = "Filtrar por nombre",modifier = Modifier.padding(vertical = 15.dp))
                 }
+                Row {
+                    Checkbox(checked = filtroL, onCheckedChange = { filtroL = it })
+                    Text(text = "Filtrar por Linea",modifier = Modifier.padding(vertical = 15.dp))
+                }
+
+                var filtro:List<Campeones> = Champs
+
+                if(filtroN){
+                    filtro = Champs.filter { campeones ->
+                        campeones.Nombre.toLowerCase().contains(TextoBuscar.toLowerCase())
+                    }
+                }
+                if(filtroL){
+                    filtro = Champs.filter { campeones ->
+                        campeones.Lineas.contains(TextoBuscar.toUpperCase())
+                    }
+                }
+
+
                 filtro.forEach{campeones ->
                         if(campeones.visible){
                             ChampCard(
@@ -96,7 +119,6 @@ fun Pantalla(navController: NavController){
                             )
                         }
 
-                    )
                 }
                 /*
                 Champs.forEach { campeones ->
@@ -158,7 +180,7 @@ fun Pantalla(navController: NavController){
 
 
 @Composable
-fun ChampCard(Nombre:String,Linea:ArrayList<String>,Winrate:Int,Imagen:Int){
+fun ChampCard(Nombre:String,Linea:List<String>,Winrate:Int,Imagen:Int){
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp)

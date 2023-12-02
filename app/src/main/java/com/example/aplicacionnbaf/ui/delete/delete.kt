@@ -1,6 +1,8 @@
 package com.example.aplicacionnbaf.ui.delete
 
+import android.graphics.Paint.Align
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -76,7 +79,7 @@ var Champeon = CargaChamp()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DelWin(navController: NavController?){
+fun DelWin(navController: NavController){
     var estaActivoSB by remember { mutableStateOf(false) }//Variable del SearchBar
     var TextoBuscar by remember { mutableStateOf("") }//Texto a buscar del SearchBar
     var ChamnewList: ArrayList<Campeones> = ArrayList<Campeones>()//Ponerarrray
@@ -146,6 +149,11 @@ fun DelWin(navController: NavController?){
                         }
                        )
 
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                    Button(onClick = { navController.navigate(Rutas.Principal.ruta) }) {
+                        Text(text = "Guardar")
+                    }
                 }
 
             }

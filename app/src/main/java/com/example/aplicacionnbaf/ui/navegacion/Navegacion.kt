@@ -5,7 +5,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.aplicacionnbaf.ui.addwindow.AddWin
+import com.example.aplicacionnbaf.ui.addwindow.AgregarCampeonScreen
 import com.example.aplicacionnbaf.ui.delete.DelWin
 import com.example.aplicacionnbaf.ui.mainMenu.Campeones
 import com.example.aplicacionnbaf.ui.modelo.Rutas
@@ -24,7 +24,7 @@ fun GrafoNavegacion(){
             Pantalla(navController = navController)
         }
         composable(Rutas.Anyadir.ruta){
-            AddWin(navController = navController)
+            AgregarCampeonScreen(navController = navController)
         }
         composable(Rutas.Delete.ruta){
             DelWin(navController = navController)
