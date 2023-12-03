@@ -1,6 +1,7 @@
 package com.example.aplicacionnbaf.ui.mainMenu
 
 
+import android.graphics.Paint.Align
 import android.media.MediaPlayer
 import androidx.compose.foundation.Image
 
@@ -15,11 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
 
 import androidx.compose.material3.Text
@@ -44,6 +47,7 @@ import androidx.navigation.NavController
 import com.example.aplicacionnbaf.R
 import com.example.aplicacionnbaf.ui.addwindow.onCampeonAdded
 import com.example.aplicacionnbaf.ui.delete.ChamDelGet
+import com.example.aplicacionnbaf.ui.detalles.detalles
 
 import com.example.aplicacionnbaf.ui.modelo.Rutas
 
@@ -59,7 +63,11 @@ fun Pantalla(navController: NavController){
     var TextoBuscar by remember { mutableStateOf("") }//Texto a buscar del SearchBar
     var filtroN by remember{ mutableStateOf(true)}
     var filtroL by remember{ mutableStateOf(false)}
-
+    var dialogo by remember{ mutableStateOf(false)}
+    var nombrecamp by remember{ mutableStateOf("")}
+    if(dialogo){
+        detalles(onDismissRequest = { dialogo = false }, NombreChamp =  nombrecamp)
+    }
     Champs = onCampeonAdded() as ArrayList<Campeones>
 
     PlayInitialSound()//Esta llamada al método pone una música al entrar a la aplicación
@@ -117,6 +125,7 @@ fun Pantalla(navController: NavController){
                                 Imagen = campeones.Imagen,
                                 Winrate = campeones.Winrate
                             )
+
                         }
 
                 }
@@ -152,8 +161,14 @@ fun Pantalla(navController: NavController){
                                 Winrate = champ.Winrate
                                 )
 
-                        }
-                        )
+                            Button(onClick = { dialogo = true; nombrecamp=champ.Nombre },modifier = Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.End)
+                                , colors = ButtonDefaults.buttonColors(Color.Yellow)) {
+                                Text(text = "Ver más")
+                            }
+                        })
+
                 }
                 
             }
@@ -181,6 +196,8 @@ fun Pantalla(navController: NavController){
 
 @Composable
 fun ChampCard(Nombre:String,Linea:List<String>,Winrate:Int,Imagen:Int){
+
+
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp)
